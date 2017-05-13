@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"></android.support.v7.widget.Toolbar>
+
+    <EditText
+        android:visibility="gone"
+        android:id="@+id/server_name_et"
+        android:hint="输入服务器名"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/server_init_btn"
+        android:text="开启服务"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
+    <EditText
+        android:layout_marginTop="100dp"
+        android:id="@+id/server_send_et"
+        android:hint="发送内容"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Button
+        android:id="@+id/server_send_btn"
+        android:text="发送"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+</LinearLayout>

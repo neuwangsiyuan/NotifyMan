@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/register_name"
+        android:hint="用户名"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <EditText
+        android:inputType="textPassword"
+        android:id="@+id/register_pwd"
+        android:hint="密码"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
+
+    <Button
+        android:id="@+id/register_btn"
+        android:text="注册"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
+
+
+</LinearLayout>
