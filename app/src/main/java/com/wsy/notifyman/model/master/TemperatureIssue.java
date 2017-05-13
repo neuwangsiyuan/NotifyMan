@@ -6,7 +6,6 @@ package com.wsy.notifyman.model.master;
 
 public class TemperatureIssue extends Issue {
 
-    private float temp;
 
     public TemperatureIssue(String tips) {
         super();
@@ -14,15 +13,14 @@ public class TemperatureIssue extends Issue {
     }
 
     public float getTemp() {
-        return temp;
+        return (float) values.get("temp");
     }
 
     public void setTemp(float temp) {
-        this.temp = temp;
+        values.put("temp",temp);
     }
 
     @Override
     public void build() {
-
     }
 }

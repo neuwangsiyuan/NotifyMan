@@ -1,5 +1,7 @@
 package com.wsy.notifyman.model.master;
 
+import java.util.Map;
+
 /**
  * Created by 思远 on 2017/5/12.
  */
@@ -10,6 +12,7 @@ public abstract class Issue {
     protected String desc;
     protected long timestamp;
     protected int level;
+    protected Map<String,Object> values;
 
 
     public abstract void build();

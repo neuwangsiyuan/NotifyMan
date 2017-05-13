@@ -3,8 +3,6 @@ package com.wsy.notifyman.server;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,10 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.alibaba.fastjson.JSON;
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
 import com.wsy.notifyman.common.BaseActivity;
+import com.wsy.notifyman.common.Group;
 import com.wsy.notifyman.common.IMEIUtils;
 import com.wsy.notifyman.common.SPHelper;
 import com.wsy.notifyman.model.MyMessage;
@@ -202,7 +200,7 @@ public class HomeActivity extends BaseActivity {
             JMessageClient.getGroupMembers(groupId, new GetGroupMembersCallback() {
                 @Override
                 public void gotResult(int i, String s, List<UserInfo> list) {
-
+                    Group.get().init(groupId,list);
                 }
             });
 

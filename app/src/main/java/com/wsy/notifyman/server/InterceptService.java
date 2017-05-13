@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.wsy.notifyman.common.Group;
 import com.wsy.notifyman.common.IssuePublish;
 import com.wsy.notifyman.model.master.Issue;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,6 +19,9 @@ import java.util.Observer;
  */
 
 public class InterceptService extends Service implements Observer {
+
+    private LinkedList<Issue> issues;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -26,6 +31,7 @@ public class InterceptService extends Service implements Observer {
     @Override
     public void onCreate() {
         super.onCreate();
+        issues = new LinkedList<>();
     }
 
     @Override
@@ -33,7 +39,11 @@ public class InterceptService extends Service implements Observer {
         if(o instanceof IssuePublish){
             Issue issue = (Issue) arg;
             if(needDistribute(issue)){
-
+                issues.add(issue);
+                if(!Group.get().isPublishing()){
+                    Issue copy = issues.poll();
+                    Group.get().publish(copy);
+                }
             }
         }
     }

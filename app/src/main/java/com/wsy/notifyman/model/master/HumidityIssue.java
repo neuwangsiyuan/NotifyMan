@@ -15,11 +15,11 @@ public class HumidityIssue extends Issue {
 
 
     public float getHumidity() {
-        return humidity;
+        return (float) values.get("humidity");
     }
 
     public void setHumidity(float humidity) {
-        this.humidity = humidity;
+        values.put("humidity",humidity);
     }
 
     @Override
