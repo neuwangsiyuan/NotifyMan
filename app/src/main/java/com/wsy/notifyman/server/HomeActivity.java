@@ -76,7 +76,6 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.server_home_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -115,7 +114,7 @@ public class HomeActivity extends BaseActivity {
 
 
         serverNameInput = (EditText) findViewById(R.id.server_name_et);
-        serverInitBtn = (Button) findViewById(R.id.server_init_btn);
+        serverInitBtn = (Button) findViewById(R.id.bind_server_btn);
         serverInitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

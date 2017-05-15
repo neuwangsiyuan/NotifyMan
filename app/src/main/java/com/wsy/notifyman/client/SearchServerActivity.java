@@ -3,20 +3,18 @@ package com.wsy.notifyman.client;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.common.BaseActivity;
 
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
+import dong.lan.base.ui.BaseActivity;
 
 /**
  * Created by 思远 on 2017/5/7.

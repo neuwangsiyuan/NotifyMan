@@ -52,7 +52,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/server_init_btn"
+            android:id="@+id/bind_server_btn"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="24dp"

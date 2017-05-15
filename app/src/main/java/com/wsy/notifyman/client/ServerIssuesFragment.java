@@ -1,4 +1,4 @@
-package com.wsy.notifyman.server.ui;
+package com.wsy.notifyman.client;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -31,12 +31,12 @@ import io.realm.Sort;
 /**
  */
 
-public class AffairsFragment extends BaseFragment implements ApplyAdapter.ApplyCallBack {
+public class ServerIssuesFragment extends BaseFragment implements ApplyAdapter.ApplyCallBack {
 
     private ApplyAdapter applyAdapter;
 
-    public static AffairsFragment newInstance(String tittle) {
-        AffairsFragment fragment = new AffairsFragment();
+    public static ServerIssuesFragment newInstance(String tittle) {
+        ServerIssuesFragment fragment = new ServerIssuesFragment();
         Bundle bundle = new Bundle();
         bundle.putString("tittle", tittle);
         fragment.setArguments(bundle);

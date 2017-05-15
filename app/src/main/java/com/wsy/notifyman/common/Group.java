@@ -53,6 +53,10 @@ public final class Group {
         }
     }
 
+    public long myGroupId(){
+        return groupId;
+    }
+
     public boolean isPublishing() {
         return TAG;
     }

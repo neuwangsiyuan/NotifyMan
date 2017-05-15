@@ -1,28 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
+        android:gravity="center_vertical"
+        android:drawablePadding="12dp"
+        android:drawableLeft="@drawable/ic_user"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
         android:id="@+id/login_name"
         android:hint="用户名"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
     <EditText
+        android:gravity="center_vertical"
+        android:drawablePadding="12dp"
+        android:drawableLeft="@drawable/ic_password"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
         android:inputType="textPassword"
         android:id="@+id/login_pwd"
         android:hint="密码"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <Button
+    <dong.lan.library.LabelTextView
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        app:radius="4dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:bg_color="@color/colorPrimary"
+        android:gravity="center"
         android:id="@+id/login_btn"
         android:text="登录"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <Button
+    <dong.lan.library.LabelTextView
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        app:radius="4dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:bg_color="@color/colorAccent"
+        android:gravity="center"
         android:id="@+id/to_register_btn"
         android:text="注册"
         android:layout_width="match_parent"
