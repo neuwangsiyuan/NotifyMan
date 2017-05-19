@@ -1,8 +1,8 @@
 package com.wsy.notifyman;
 
 import android.app.Application;
-import android.util.Log;
 
+import com.blankj.ALog;
 import com.hss01248.notifyutil.NotifyUtil;
 import com.wsy.notifyman.common.MessageDispatcher;
 import com.wsy.notifyman.common.SPHelper;
@@ -64,10 +64,11 @@ public class App extends Application {
                 apply.status = Config.APPLY_NEW;
                 apply.applyTime = System.currentTimeMillis();
                 realm.commitTransaction();
-                Log.d("TAG", "onEvent: "+apply);
+                ALog.d("onEvent: "+apply);
                 //...
                 break;
             case invite_accepted://对方接收了你的好友邀请
+
                 //...
                 break;
             case invite_declined://对方拒绝了你的好友邀请

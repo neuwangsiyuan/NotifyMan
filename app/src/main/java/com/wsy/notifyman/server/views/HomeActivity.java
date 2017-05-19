@@ -1,4 +1,4 @@
-package com.wsy.notifyman.server;
+package com.wsy.notifyman.server.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,15 +20,11 @@ import android.widget.TextView;
 
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.common.BaseActivity;
 import com.wsy.notifyman.common.Group;
 import com.wsy.notifyman.common.IMEIUtils;
 import com.wsy.notifyman.common.SPHelper;
 import com.wsy.notifyman.model.MyMessage;
-import com.wsy.notifyman.server.ui.AffairsFragment;
-import com.wsy.notifyman.server.ui.GroupFragment;
-import com.wsy.notifyman.server.ui.IssuesFragment;
-import com.wsy.notifyman.server.ui.StatusFragment;
+import com.wsy.notifyman.server.CreatorServer;
 
 import java.util.List;
 
@@ -38,6 +34,7 @@ import cn.jpush.im.android.api.callback.GetGroupMembersCallback;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
+import dong.lan.base.ui.BaseActivity;
 import dong.lan.base.ui.BaseFragment;
 
 /**
@@ -67,7 +64,6 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_home);
         startService(new Intent(this, CreatorServer.class));
-        startService(new Intent(this, InterceptService.class));
         initView();
 
         init();
@@ -95,11 +91,10 @@ public class HomeActivity extends BaseActivity {
 
     private void initView() {
 
-        tabs = new Fragment[4];
+        tabs = new Fragment[3];
         tabs[0] = StatusFragment.newInstance("状态");
-        tabs[1] = IssuesFragment.newInstance("故障");
-        tabs[2] = GroupFragment.newInstance("成员");
-        tabs[3] = AffairsFragment.newInstance("事务");
+        tabs[1] = GroupFragment.newInstance("成员");
+        tabs[2] = AffairsFragment.newInstance("事务");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,15 +117,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-
-//        serverSendEt = (EditText) findViewById(R.id.server_send_et);
-//        serverSendBtn = (Button) findViewById(R.id.server_send_btn);
-//        serverSendBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sendText();
-//            }
-//        });
     }
 
     private void sendText() {

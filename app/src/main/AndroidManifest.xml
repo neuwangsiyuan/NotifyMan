@@ -39,7 +39,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".client.SplashActivity"
+        <activity android:name=".common.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>
@@ -48,15 +48,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".server.HomeActivity"
+        <activity android:name=".server.views.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"
             />
-        <activity android:name=".server.ApplyCenterActivity" />
-        <activity android:name=".client.SearchServerActivity" />
-        <activity android:name=".client.MessageDetailActivity" />
-        <activity android:name=".client.HomeActivity" />
-        <activity android:name=".client.LoginActivity" />
-        <activity android:name=".client.RegisterActivity" />
+        <activity android:name=".server.views.ApplyCenterActivity" />
+        <activity android:name=".client.views.SearchServerActivity" />
+        <activity android:name=".client.views.MessageDetailActivity" />
+        <activity android:name=".client.views.HomeActivity"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".client.views.LoginActivity" />
+        <activity android:name=".client.views.RegisterActivity" />
         <!-- Required SDK 核心功能-->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service

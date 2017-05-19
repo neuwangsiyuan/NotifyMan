@@ -1,4 +1,4 @@
-package com.wsy.notifyman.client;
+package com.wsy.notifyman.client.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

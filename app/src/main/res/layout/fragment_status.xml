@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/status_cpu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/status_memory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/status_storage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/status_temperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/status_humidity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/status_net"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_server"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

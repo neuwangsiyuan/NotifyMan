@@ -1,70 +1,89 @@
-package com.wsy.notifyman.server;
+package com.wsy.notifyman.server.views;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.common.BaseActivity;
+import com.wsy.notifyman.common.Group;
 import com.wsy.notifyman.common.SPHelper;
 import com.wsy.notifyman.model.Apply;
+import com.wsy.notifyman.server.adapter.ApplyAdapter;
 
 import java.util.Collections;
 
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
+import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
+import dong.lan.base.ui.BaseFragment;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**
- * Created by 思远 on 2017/5/7.
  */
 
-public class ApplyCenterActivity extends BaseActivity implements ApplyAdapter.ApplyCallBack {
+public class AffairsFragment extends BaseFragment implements ApplyAdapter.ApplyCallBack {
 
-
-    private RecyclerView applyList;
     private ApplyAdapter applyAdapter;
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply_center);
-        applyList = (RecyclerView) findViewById(R.id.apply_list);
-        applyList.setLayoutManager(new GridLayoutManager(this,1));
 
-        init();
+    public static AffairsFragment newInstance(String tittle) {
+        AffairsFragment fragment = new AffairsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("tittle", tittle);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    private void init() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Apply> applies = realm.where(Apply.class).findAllSortedAsync("applyTime", Sort.DESCENDING);
-        applies.addChangeListener(new RealmChangeListener<RealmResults<Apply>>() {
-            @Override
-            public void onChange(RealmResults<Apply> element) {
-                applyAdapter.notifyDataSetChanged();
-            }
-        });
-        applyAdapter = new ApplyAdapter(applies);
-        applyAdapter.setApplyCallBack(this);
-        applyList.setAdapter(applyAdapter);
 
+    private LRecyclerView applyList;
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(content == null){
+            content = inflater.inflate(R.layout.fragment_affairs,container,false);
+            applyList = (LRecyclerView) content.findViewById(R.id.list);
+            applyList.setLayoutManager(new GridLayoutManager(getContext(),1));
+            start(null);
+        }
+        return content;
+    }
+
+    @Override
+    public void start(Object data) {
+        if(isAdded() && isStart){
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<Apply> applies = realm.where(Apply.class).findAllSortedAsync("applyTime", Sort.DESCENDING);
+            applies.addChangeListener(new RealmChangeListener<RealmResults<Apply>>() {
+                @Override
+                public void onChange(RealmResults<Apply> element) {
+                    applyAdapter.notifyDataSetChanged();
+                }
+            });
+            applyAdapter = new ApplyAdapter(applies);
+            applyAdapter.setApplyCallBack(this);
+            applyList.setAdapter(new LRecyclerViewAdapter(applyAdapter));
+        }
+        super.start(data);
     }
 
     @Override
     public void apply(final Apply apply) {
         final String user = apply.applyUser;
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(getContext())
                 .setTitle("绑定申请")
                 .setMessage(apply.applyReason)
                 .setPositiveButton("同意", new DialogInterface.OnClickListener() {
@@ -93,7 +112,7 @@ public class ApplyCenterActivity extends BaseActivity implements ApplyAdapter.Ap
                 }).show();
     }
 
-    private void addToGroup(String user) {
+    private void addToGroup(final String user) {
         long groupId = SPHelper.get().getLong("groupId");
         if(groupId!=0 && !TextUtils.isEmpty(user)){
             JMessageClient.addGroupMembers(groupId, Collections.singletonList(user), new BasicCallback() {
@@ -101,6 +120,13 @@ public class ApplyCenterActivity extends BaseActivity implements ApplyAdapter.Ap
                 public void gotResult(int i, String s) {
                     if(i == 0){
                         toast("入群成功");
+                        JMessageClient.getUserInfo(user, new GetUserInfoCallback() {
+                            @Override
+                            public void gotResult(int i, String s, UserInfo userInfo) {
+                                if(i == 0)
+                                    Group.get().getUsers().add(userInfo);
+                            }
+                        });
                     }else{
                         toast("入群失败："+s);
                     }

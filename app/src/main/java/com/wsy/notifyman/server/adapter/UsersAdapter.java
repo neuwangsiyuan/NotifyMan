@@ -1,4 +1,4 @@
-package com.wsy.notifyman.server;
+package com.wsy.notifyman.server.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

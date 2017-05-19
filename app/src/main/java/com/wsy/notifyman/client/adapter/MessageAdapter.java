@@ -1,16 +1,16 @@
-package com.wsy.notifyman.server;
+package com.wsy.notifyman.client.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.wsy.notifyman.Config;
+import com.alibaba.fastjson.JSON;
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.model.Apply;
+import com.wsy.notifyman.model.LocalMessage;
+import com.wsy.notifyman.model.MyMessage;
 
 import io.realm.RealmResults;
 
@@ -18,34 +18,35 @@ import io.realm.RealmResults;
  * Created by 思远 on 2017/5/7.
  */
 
-public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
 
-    private RealmResults<Apply> applies;
+    private RealmResults<LocalMessage> applies;
 
-    public ApplyAdapter(RealmResults<Apply> applies) {
+    public MessageAdapter(RealmResults<LocalMessage> applies) {
         this.applies = applies;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_apply,null));
+        .inflate(R.layout.item_message,null));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Apply apply = applies.get(position);
-        if(apply.status == Config.APPLY_NEW){
-            holder.handler.setText("同意");
-            holder.handler.setEnabled(true);
-        }else{
-            holder.handler.setText("已同意");
-            holder.handler.setEnabled(false);
-        }
-        holder.reason.setText(apply.applyReason);
-        holder.username.setText(apply.applyUser);
-        Log.d("TAG", "onBindViewHolder: "+apply);
+        LocalMessage localMessage = applies.get(position);
+        MyMessage myMessage = JSON.parseObject(localMessage.data,MyMessage.class);
+
+//        if(apply.status == Config.APPLY_NEW){
+            holder.handler.setText("已阅");
+//            holder.handler.setEnabled(true);
+//        }else{
+//            holder.handler.setText("已同意");
+//            holder.handler.setEnabled(false);
+//        }
+        holder.reason.setText(myMessage.data);
+        //holder.username.setText(apply.applyUser);
     }
 
     @Override
@@ -76,19 +77,19 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> 
     }
 
     private void applyAgree(int position) {
-        Apply apply = applies.get(position);
+        LocalMessage apply = applies.get(position);
         if(applyCallBack!=null)
             applyCallBack.apply(apply);
     }
 
-    public void setApplyCallBack(ApplyCallBack callBack){
+    public void setLocalMessageCallBack(LocalMessageCallBack callBack){
         applyCallBack = callBack;
     }
 
-    private ApplyCallBack applyCallBack;
+    private LocalMessageCallBack applyCallBack;
 
 
-    public interface ApplyCallBack{
-        void apply(Apply apply);
+    public interface LocalMessageCallBack{
+        void apply(LocalMessage apply);
     }
 }

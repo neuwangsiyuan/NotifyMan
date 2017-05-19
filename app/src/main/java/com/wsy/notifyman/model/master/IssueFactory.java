@@ -1,6 +1,6 @@
 package com.wsy.notifyman.model.master;
 
-import com.wsy.notifyman.Config;
+import com.wsy.notifyman.server.PC;
 
 /**
  * Created by 思远 on 2017/5/12.
@@ -10,61 +10,53 @@ import com.wsy.notifyman.Config;
 public class IssueFactory {
 
 
-    public static final int TAG = 10000;
-    public static final int COUNT = 6;
-    public static final int BUCKET[] = new int[COUNT];
-
-    /**
-     * 打乱随机数组
-     */
-    public static void CHAOS() {
-        for (int i = 0; i < COUNT; i++) {
-            int x = (int) (Math.random() * TAG / (COUNT - i));
-            BUCKET[i] = x;
+    public static Issue build(PC pc) {
+        int level = 0;
+        StringBuilder sb = new StringBuilder();
+        if (pc.getCpuRate() >= 80) {
+            sb.append("CPU负载过高（");
+            sb.append(pc.getCpuRate());
+            sb.append("%)\n");
+            level++;
         }
-    }
-
-    /**
-     * 从随机数据里找第一个比当前随机数大的索引位置
-     *
-     * @param x
-     * @return
-     */
-    public static int Pick(int x) {
-        for (int i = 0; i < COUNT; i++) {
-            if (BUCKET[i] > x)
-                return i;
+        float rate = pc.getMemoryUse() / pc.getMemoryCount();
+        if (rate >= 0.8) {
+            sb.append("内存负载过高（");
+            sb.append(((rate * 100)));
+            sb.append("%)\n");
+            level++;
         }
-        int t = (int) (Math.random() * TAG % (COUNT * COUNT));
-        return t < COUNT ? t : -1;
-    }
-
-    public static Issue build(int type) {
-        switch (type) {
-            case 0:
-
-                break;
-            case 1:
-
-                break;
-            case 2:
-
-
-                break;
-            case 3:
-
-
-                break;
-
-            case 4:
-
-                break;
-            case 5:
-
-                break;
-            default:
-                return null;
+        rate = pc.getStorageUse() / pc.getStorageCount();
+        if (rate >= 0.8) {
+            sb.append("磁盘负载过高（");
+            sb.append(((rate * 100)));
+            sb.append("%)\n");
+            level++;
         }
-        return null;
+        if (pc.getTemperature() >= 45) {
+            sb.append("机房温度过高（");
+            sb.append(pc.getTemperature());
+            sb.append("℃)\n");
+            level++;
+        }
+        if (pc.getHumidity() >= 80) {
+            sb.append("机房湿度指数过高（");
+            sb.append(pc.getHumidity());
+            sb.append(")\n");
+            level++;
+        }
+
+        if (pc.getNetRate() >= 80) {
+            sb.append("服务器网络负载过高（");
+            sb.append(pc.getNetRate());
+            sb.append("%)\n");
+            level++;
+        }
+        Issue issue = new Issue();
+        issue.desc = sb.toString();
+        issue.level = level;
+        issue.setPc(PC.get());
+
+        return issue;
     }
 }

@@ -1,21 +1,19 @@
 package com.wsy.notifyman.model.master;
 
-import java.util.Map;
+import com.wsy.notifyman.server.PC;
 
 /**
  * Created by 思远 on 2017/5/12.
  */
 
-public abstract class Issue {
+public  class Issue {
 
     protected String id;
     protected String desc;
     protected long timestamp;
     protected int level;
-    protected Map<String,Object> values;
+    private PC pc;
 
-
-    public abstract void build();
 
     public Issue() {
         id = String.valueOf(System.currentTimeMillis());
@@ -54,11 +52,22 @@ public abstract class Issue {
         this.timestamp = timestamp;
     }
 
-    public Map<String, Object> getValues() {
-        return values;
+    public void setPc(PC pc) {
+        this.pc = pc;
     }
 
-    public void setValues(Map<String, Object> values) {
-        this.values = values;
+    public PC getPc() {
+        return pc;
+    }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id='" + id + '\'' +
+                ", desc='" + desc + '\'' +
+                ", timestamp=" + timestamp +
+                ", level=" + level +
+                ", pc=" + pc +
+                '}';
     }
 }

@@ -1,53 +1,51 @@
-package com.wsy.notifyman.client;
+package com.wsy.notifyman.server.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.model.LocalMessage;
-import com.wsy.notifyman.model.MyMessage;
+import com.wsy.notifyman.model.Apply;
 
+import dong.lan.library.LabelTextView;
 import io.realm.RealmResults;
 
 /**
  * Created by 思远 on 2017/5/7.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> {
 
 
-    private RealmResults<LocalMessage> applies;
+    private RealmResults<Apply> applies;
 
-    public MessageAdapter(RealmResults<LocalMessage> applies) {
+    public ApplyAdapter(RealmResults<Apply> applies) {
         this.applies = applies;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_message,null));
+        .inflate(R.layout.item_apply,null));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        LocalMessage localMessage = applies.get(position);
-        MyMessage myMessage = JSON.parseObject(localMessage.data,MyMessage.class);
-
-//        if(apply.status == Config.APPLY_NEW){
-            holder.handler.setText("已阅");
-//            holder.handler.setEnabled(true);
-//        }else{
-//            holder.handler.setText("已同意");
-//            holder.handler.setEnabled(false);
-//        }
-        holder.reason.setText(myMessage.data);
-        //holder.username.setText(apply.applyUser);
+        Apply apply = applies.get(position);
+        if(apply.status == Config.APPLY_NEW){
+            holder.handler.setText("同意");
+            holder.handler.setEnabled(true);
+        }else{
+            holder.handler.setText("已同意");
+            holder.handler.setEnabled(false);
+        }
+        holder.reason.setText(apply.applyReason);
+        holder.username.setText(apply.applyUser);
+        Log.d("TAG", "onBindViewHolder: "+apply);
     }
 
     @Override
@@ -59,14 +57,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         TextView username;
         TextView reason;
-        Button handler;
+        LabelTextView handler;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             username = (TextView) itemView.findViewById(R.id.item_apply_user);
             reason = (TextView) itemView.findViewById(R.id.item_apply_reason);
-            handler = (Button) itemView.findViewById(R.id.item_apply_handler);
+            handler = (LabelTextView) itemView.findViewById(R.id.item_apply_handler);
 
             handler.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,19 +76,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     private void applyAgree(int position) {
-        LocalMessage apply = applies.get(position);
+        Apply apply = applies.get(position);
         if(applyCallBack!=null)
             applyCallBack.apply(apply);
     }
 
-    public void setLocalMessageCallBack(LocalMessageCallBack callBack){
+    public void setApplyCallBack(ApplyCallBack callBack){
         applyCallBack = callBack;
     }
 
-    private LocalMessageCallBack applyCallBack;
+    private ApplyCallBack applyCallBack;
 
 
-    public interface LocalMessageCallBack{
-        void apply(LocalMessage apply);
+    public interface ApplyCallBack{
+        void apply(Apply apply);
     }
 }

@@ -1,9 +1,11 @@
 package com.wsy.notifyman.model;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.alibaba.fastjson.JSON;
-import com.wsy.notifyman.client.IssuesAdapter;
+import com.wsy.notifyman.client.adapter.IssuesAdapter;
+import com.wsy.notifyman.client.views.IssuseDetailActivity;
 import com.wsy.notifyman.model.master.Issue;
 
 import io.realm.RealmObject;
@@ -27,7 +29,6 @@ public class LocalIssue extends RealmObject {
     Issue issue;
 
     public LocalIssue() {
-
     }
 
     public LocalIssue(Issue issue) {
@@ -41,9 +42,15 @@ public class LocalIssue extends RealmObject {
     }
 
     public void show(IssuesAdapter.ViewHolder holder) {
+        if (issue == null)
+            issue = JSON.parseObject(origin, Issue.class);
+        holder.level.setText(String.valueOf(issue.getLevel()));
+        holder.desc.setText(issue.getDesc());
     }
 
     public void jump(Context context) {
-
+        Intent intent = new Intent(context, IssuseDetailActivity.class);
+        intent.putExtra("issue", origin);
+        context.startActivity(intent);
     }
 }

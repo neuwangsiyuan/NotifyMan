@@ -1,4 +1,4 @@
-package com.wsy.notifyman.client;
+package com.wsy.notifyman.client.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.wsy.notifyman.R;
-import com.wsy.notifyman.common.BaseActivity;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
+import dong.lan.base.ui.BaseActivity;
 
 /**
  * Created by 思远 on 2017/5/7.

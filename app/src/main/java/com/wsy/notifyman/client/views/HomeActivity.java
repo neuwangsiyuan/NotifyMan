@@ -1,6 +1,5 @@
-package com.wsy.notifyman.client;
+package com.wsy.notifyman.client.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -20,6 +19,11 @@ import android.widget.TextView;
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
 import com.wsy.notifyman.common.SPHelper;
+import com.wsy.notifyman.event.ClientRefreshEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -30,6 +34,7 @@ import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import dong.lan.base.ui.BaseActivity;
+import dong.lan.base.ui.BaseFragment;
 
 /**
  * Created by 思远 on 2017/5/6.
@@ -54,6 +59,8 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_home);
 
+        EventBus.getDefault().register(this);
+
         initView();
 
         init();
@@ -69,9 +76,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search) {
-            toSearchUser();
-        } else if (id == R.id.action_logout) {
+        if (id == R.id.action_logout) {
             JMessageClient.logout();
             SPHelper.get().putLong("groupId", 0);
             finish();
@@ -79,10 +84,7 @@ public class HomeActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void toSearchUser() {
-        //// TODO: 2017/5/7
-        startActivity(new Intent(this, SearchServerActivity.class));
-    }
+
 
     private void initView() {
 
@@ -126,31 +128,13 @@ public class HomeActivity extends BaseActivity {
         search(serverName);
     }
 
-    private void sendText() {
-//        String text = clientSentEt.getText().toString();
-//        if (TextUtils.isEmpty(text)) {
-//            toast("内容不能为空");
-//            return;
-//        }
-//        if(!isConv){
-//            toast("无法同步服务器id,请退出重试");
-//            return;
-//        }
-//        MyMessage myMessage = new MyMessage();
-//        myMessage.code = Config.MSG_TEXT;
-//        myMessage.data = text;
-//        Message message = JMessageClient.createGroupTextMessage(groupId, myMessage.toJson());
-//        message.setOnSendCompleteCallback(new BasicCallback() {
-//            @Override
-//            public void gotResult(int i, String s) {
-//                if (i == 0) {
-//                    toast("发送成功");
-//                } else {
-//                    toast("发送失败：" + i);
-//                }
-//            }
-//        });
-//        JMessageClient.sendMessage(message);
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(ClientRefreshEvent event){
+        if(!isConv)
+            running();
+
     }
 
 
@@ -168,23 +152,15 @@ public class HomeActivity extends BaseActivity {
             public void gotResult(int i, String s, List<Long> list) {
                 if (i == 0 && list != null && !list.isEmpty()) {
                     groupId = list.get(0);
+                    serverName.setText(String.valueOf(groupId));
                     SPHelper.get().putLong("groupId", groupId);
                     JMessageClient.enterGroupConversation(groupId);
                     isConv = true;
                     toast("与服务器连接成功");
+                    ((BaseFragment)tabs[0]).start(null);
                 }
             }
         });
-//        RealmResults<LocalMessage> messages = Realm.getDefaultInstance().where(LocalMessage.class)
-//                .findAllAsync();
-//
-//        messages.addChangeListener(new RealmChangeListener<RealmResults<LocalMessage>>() {
-//            @Override
-//            public void onChange(RealmResults<LocalMessage> element) {
-//                messageList.getAdapter().notifyDataSetChanged();
-//            }
-//        });
-//        messageList.setAdapter(new MessageAdapter(messages));
     }
 
     private void apply(String username, String reason) {
@@ -219,6 +195,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (isConv)
             JMessageClient.exitConversation();
     }

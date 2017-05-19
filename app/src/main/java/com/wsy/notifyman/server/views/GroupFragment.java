@@ -1,4 +1,4 @@
-package com.wsy.notifyman.server.ui;
+package com.wsy.notifyman.server.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.wsy.notifyman.R;
 import com.wsy.notifyman.common.Group;
-import com.wsy.notifyman.server.UsersAdapter;
+import com.wsy.notifyman.server.adapter.UsersAdapter;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class GroupFragment extends BaseFragment implements BaseItemClickListener
                 @Override
                 public void gotResult(int i, String s, List<UserInfo> list) {
                     if (i == 0) {
-                        adapter = new UsersAdapter(list);
+                        adapter = new UsersAdapter(Group.get().getUsers());
                         adapter.setClickListener(GroupFragment.this);
                         groupList.setAdapter(adapter);
                     } else {

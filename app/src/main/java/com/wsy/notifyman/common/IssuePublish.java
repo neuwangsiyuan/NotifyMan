@@ -15,7 +15,6 @@ public class IssuePublish extends Observable{
 
     private IssuePublish() {
         //no instance
-
     }
 
     private static IssuePublish publish = new IssuePublish();
