@@ -41,7 +41,6 @@ public final class Group {
     private List<UserInfo> users = new ArrayList<>();
     private Map<UserInfo, ClientStatus> userStatusMap = new HashMap<>();
 
-
     public List<Issue> getIssues(){
         return issues;
     }
@@ -70,13 +69,7 @@ public final class Group {
     public long myGroupId() {
         return groupId;
     }
-
-    public boolean isPublishing() {
-        return TAG;
-    }
-
     private int curIndex = 0;
-    private boolean TAG = false;
     private boolean isInit = false;
 
     /**
@@ -87,7 +80,7 @@ public final class Group {
     public void publish(Issue copy) {
         final UserInfo targetUser = users.get(curIndex);
         MyMessage m = new MyMessage();
-        m.code = com.wsy.notifyman.Config.CODE_SERVER_SEND;
+        m.code = Config.CODE_SERVER_ISSUE;
         m.data = JSON.toJSONString(copy);
         Message message = JMessageClient.createSingleTextMessage(targetUser.getUserName(), m.toJson());
         message.setOnSendCompleteCallback(new BasicCallback() {
@@ -96,7 +89,7 @@ public final class Group {
                 if (i == 0) {
                     userStatusMap.get(targetUser).publishTime = System.currentTimeMillis();
                 } else {
-                    ALog.d("DOOZE", "gotResult: " + i + "," + s);
+                    ALog.d("gotResult: " + i + "," + s);
                 }
             }
         });
@@ -116,6 +109,12 @@ public final class Group {
         return status.isHandler;
     }
 
+    public void reset(){
+        for(int i = 0;i<users.size();i++){
+            userStatusMap.get(users.get(i)).isHandler = false;
+        }
+    }
+
     public boolean isInit() {
         return isInit;
     }
@@ -130,6 +129,9 @@ public final class Group {
     }
 
     public Issue nextIssue() {
+        if(issues.isEmpty())
+            return null;
+        reset();
         return issues.poll();
     }
 

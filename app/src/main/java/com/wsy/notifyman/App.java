@@ -37,6 +37,7 @@ public class App extends Application {
         JMessageClient.setDebugMode(true);
         SPHelper.get().init(this,"notify");
 
+        new ALog.Builder(this).setGlobalTag("DOOZE");
 
         JMessageClient.registerEventReceiver(this);
     }

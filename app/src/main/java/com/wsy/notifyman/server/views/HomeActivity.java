@@ -18,20 +18,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.wsy.notifyman.Config;
+import com.blankj.ALog;
 import com.wsy.notifyman.R;
 import com.wsy.notifyman.common.Group;
 import com.wsy.notifyman.common.IMEIUtils;
 import com.wsy.notifyman.common.SPHelper;
-import com.wsy.notifyman.model.MyMessage;
 import com.wsy.notifyman.server.CreatorServer;
 
 import java.util.List;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.CreateGroupCallback;
+import cn.jpush.im.android.api.callback.GetGroupIDListCallback;
 import cn.jpush.im.android.api.callback.GetGroupMembersCallback;
-import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import dong.lan.base.ui.BaseActivity;
@@ -46,24 +45,16 @@ public class HomeActivity extends BaseActivity {
     private static final String TAG = HomeActivity.class.getCanonicalName();
     private EditText serverNameInput;
     private Button serverInitBtn;
-
-    private EditText serverSendEt;
-    private Button serverSendBtn;
     private long groupId;
     private TextView serverName;
     private TextView serverGroupId;
-
-
-    private TabLayout tabLayout;
-    private Toolbar toolbar;
-    private ViewPager viewPager;
     private Fragment[] tabs;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_home);
-        startService(new Intent(this, CreatorServer.class));
+
         initView();
 
         init();
@@ -96,10 +87,10 @@ public class HomeActivity extends BaseActivity {
         tabs[1] = GroupFragment.newInstance("成员");
         tabs[2] = AffairsFragment.newInstance("事务");
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.container);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
 
@@ -119,28 +110,6 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-    private void sendText() {
-        String text = serverSendEt.getText().toString();
-        if (TextUtils.isEmpty(text)) {
-            toast("内容不能为空");
-            return;
-        }
-        MyMessage myMessage = new MyMessage();
-        myMessage.code = Config.MSG_TEXT;
-        myMessage.data = text;
-        Message message = JMessageClient.createGroupTextMessage(groupId, myMessage.toJson());
-        message.setOnSendCompleteCallback(new BasicCallback() {
-            @Override
-            public void gotResult(int i, String s) {
-                if (i == 0) {
-                    toast("发送成功");
-                } else {
-                    toast("发送失败：" + i);
-                }
-            }
-        });
-        JMessageClient.sendMessage(message);
-    }
 
     //创建以服务器帮绑定的群组
     private void createServerGroup() {
@@ -209,25 +178,31 @@ public class HomeActivity extends BaseActivity {
 
     //服务器逻辑开始
     private void running() {
-        groupId = SPHelper.get().getLong("groupId");
-        serverGroupId.setText(String.valueOf(groupId));
-        if (groupId == 0) {
-            serverInitBtn.setVisibility(View.VISIBLE);
-            serverNameInput.setVisibility(View.VISIBLE);
-        } else {
-            JMessageClient.enterGroupConversation(groupId);
-            JMessageClient.getGroupMembers(groupId, new GetGroupMembersCallback() {
-                @Override
-                public void gotResult(int i, String s, List<UserInfo> list) {
-                    Group.get().init(groupId, list);
-                    for(int x = 0;x<tabs.length;x++){
-                        ((BaseFragment)tabs[x]).start("");
-                    }
+        JMessageClient.getGroupIDList(new GetGroupIDListCallback() {
+            @Override
+            public void gotResult(int i, String s, List<Long> list) {
+                if(i == 0 && !list.isEmpty()){
+                    groupId = list.get(0);
+                    ALog.d(groupId);
+                    SPHelper.get().putLong("groupId",groupId);
+                    JMessageClient.enterGroupConversation(groupId);
+                    JMessageClient.getGroupMembers(groupId, new GetGroupMembersCallback() {
+                        @Override
+                        public void gotResult(int i, String s, List<UserInfo> list) {
+                            Group.get().init(groupId, list);
+                            startService(new Intent(HomeActivity.this, CreatorServer.class));
+                            for(int x = 0;x<tabs.length;x++){
+                                ((BaseFragment)tabs[x]).start("");
+                            }
+                        }
+                    });
+                }else{
+                    serverInitBtn.setVisibility(View.VISIBLE);
+                    serverNameInput.setVisibility(View.VISIBLE);
                 }
-            });
-
-
-        }
+                serverGroupId.setText(String.valueOf(groupId));
+            }
+        });
     }
 
 

@@ -8,6 +8,7 @@ import com.wsy.notifyman.client.adapter.IssuesAdapter;
 import com.wsy.notifyman.client.views.IssuseDetailActivity;
 import com.wsy.notifyman.model.master.Issue;
 
+import dong.lan.base.utils.DateUtils;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -44,13 +45,28 @@ public class LocalIssue extends RealmObject {
     public void show(IssuesAdapter.ViewHolder holder) {
         if (issue == null)
             issue = JSON.parseObject(origin, Issue.class);
-        holder.level.setText(String.valueOf(issue.getLevel()));
-        holder.desc.setText(issue.getDesc());
+        if (issue != null) {
+            holder.level.setText(String.valueOf(issue.getLevel()));
+            holder.desc.setText(issue.getDesc());
+            holder.params.setText(DateUtils.getTime(issue.getTimestamp(), "yyyy-MM-dd HH:mm"));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "LocalIssue{" +
+                "id='" + id + '\'' +
+                ", origin='" + origin + '\'' +
+                ", createdAt=" + createdAt +
+                ", issue=" + issue +
+                '}';
     }
 
     public void jump(Context context) {
         Intent intent = new Intent(context, IssuseDetailActivity.class);
         intent.putExtra("issue", origin);
         context.startActivity(intent);
+
+
     }
 }

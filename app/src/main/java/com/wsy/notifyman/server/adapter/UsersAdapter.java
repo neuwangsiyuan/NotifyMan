@@ -8,8 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wsy.notifyman.R;
-
-import java.util.List;
+import com.wsy.notifyman.common.Group;
 
 import cn.jpush.im.android.api.model.UserInfo;
 import dong.lan.base.BaseItemClickListener;
@@ -22,10 +21,8 @@ import dong.lan.base.ui.customView.CircleImageView;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
 
-    private List<UserInfo> userInfos;
 
-    public UsersAdapter(List<UserInfo> userInfos) {
-        this.userInfos = userInfos;
+    public UsersAdapter() {
     }
 
     @Override
@@ -36,7 +33,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        UserInfo userInfo = userInfos.get(position);
+        UserInfo userInfo = Group.get().getUsers().get(position);
         Glide.with(holder.itemView.getContext())
                 .load(userInfo.getAvatar())
                 .error(R.drawable.user)
@@ -53,7 +50,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return userInfos == null ? 0 : userInfos.size();
+        return Group.get().getUsers().size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,7 +72,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     @Override
                     public void onClick(View v) {
                         int p = getLayoutPosition();
-                        clickListener.onClick(userInfos.get(p), 0, p);
+                        clickListener.onClick(Group.get().getUsers().get(p), 0, p);
                     }
                 });
             }

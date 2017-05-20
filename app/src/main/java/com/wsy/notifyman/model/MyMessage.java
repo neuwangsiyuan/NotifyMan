@@ -2,8 +2,6 @@ package com.wsy.notifyman.model;
 
 import com.alibaba.fastjson.JSON;
 
-import io.realm.RealmObject;
-
 /**
  * Created by 思远 on 2017/5/7.
  */
@@ -24,5 +22,13 @@ public class MyMessage {
 
     public String toJson(){
         return JSON.toJSONString(this);
+    }
+
+    @Override
+    public String toString() {
+        return "MyMessage{" +
+                "code=" + code +
+                ", data='" + data + '\'' +
+                '}';
     }
 }

@@ -45,6 +45,7 @@ public class CreatorServer extends Service {
     }
 
     private Issue curIssue;
+    private boolean isFirst = true;
 
     private void testing() {
         if (Group.get().isReceived()) {
@@ -54,14 +55,17 @@ public class CreatorServer extends Service {
                 Group.get().publish(curIssue);
             }
         } else {
-            if (System.currentTimeMillis() - curTime > Config.TIME_GAP) {
+            if (isFirst) {
+                isFirst = false;
+                curIssue = Group.get().nextIssue();
+                if (curIssue != null)
+                    Group.get().publish(curIssue);
+            } else if (System.currentTimeMillis() - curTime > Config.TIME_GAP) {
                 //所有用户30s内都没有接受到信息,直接发送下一个消息
                 if (Group.get().nextValidPublic()) {
                     curIssue = Group.get().nextIssue();
-                    if (curIssue != null) {
-                        Group.get().publish(curIssue);
-                    }
-                } else {
+                }
+                if (curIssue != null) {
                     Group.get().publish(curIssue);
                 }
                 curTime = System.currentTimeMillis();
@@ -76,12 +80,10 @@ public class CreatorServer extends Service {
 
     private void monitoring() {
         if (System.currentTimeMillis() - timeGap > 10000) {
-
             if (PC.get().isAlert()) {
                 Issue issue = IssueFactory.build(PC.get()); // 产生故障
                 ALog.d(issue);
-                if (issue != null)
-                    Group.get().newIssue(issue);
+                Group.get().newIssue(issue);
             }
             timeGap = System.currentTimeMillis();
             PC.get().init();

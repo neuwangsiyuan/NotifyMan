@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.jdsjlzx.recyclerview.LRecyclerView;
-import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.wsy.notifyman.Config;
 import com.wsy.notifyman.R;
 import com.wsy.notifyman.common.Group;
@@ -48,14 +47,14 @@ public class AffairsFragment extends BaseFragment implements ApplyAdapter.ApplyC
     }
 
 
-    private LRecyclerView applyList;
+    private RecyclerView applyList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(content == null){
             content = inflater.inflate(R.layout.fragment_affairs,container,false);
-            applyList = (LRecyclerView) content.findViewById(R.id.list);
+            applyList = (RecyclerView) content.findViewById(R.id.list);
             applyList.setLayoutManager(new GridLayoutManager(getContext(),1));
             start(null);
         }
@@ -75,7 +74,7 @@ public class AffairsFragment extends BaseFragment implements ApplyAdapter.ApplyC
             });
             applyAdapter = new ApplyAdapter(applies);
             applyAdapter.setApplyCallBack(this);
-            applyList.setAdapter(new LRecyclerViewAdapter(applyAdapter));
+            applyList.setAdapter(applyAdapter);
         }
         super.start(data);
     }
@@ -97,7 +96,8 @@ public class AffairsFragment extends BaseFragment implements ApplyAdapter.ApplyC
                                     Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            RealmResults<Apply> applies = realm.where(Apply.class).endsWith("applyUser",user).findAll();
+                                            RealmResults<Apply> applies = realm.where(Apply.class).equalTo("applyUser",user).findAll();
+                                            if(applies!=null && !applies.isEmpty())
                                             for(Apply a : applies){
                                                 a.status = Config.APPLY_AGREE;
                                             }
