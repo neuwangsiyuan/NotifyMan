@@ -32,7 +32,7 @@ public class IssuesAdapter extends RecyclerView.Adapter<IssuesAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         Issue issue = Group.get().getIssues().get(position);
         if(issue!=null){
-            holder.level.setText(""+issue.getLevel());
+            holder.level.setText("等级："+issue.getLevel()+" 频次："+issue.getCount());
             holder.desc.setText(issue.getDesc());
             holder.params.setText(DateUtils.getTime(issue.getTimestamp(),"yyyy-MM-dd HH:mm"));
         }

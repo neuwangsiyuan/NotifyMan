@@ -41,11 +41,11 @@ public final class Group {
     private List<UserInfo> users = new ArrayList<>();
     private Map<UserInfo, ClientStatus> userStatusMap = new HashMap<>();
 
-    public List<Issue> getIssues(){
+    public List<Issue> getIssues() {
         return issues;
     }
 
-    public List<UserInfo> getUsers(){
+    public List<UserInfo> getUsers() {
         return users;
     }
 
@@ -69,6 +69,7 @@ public final class Group {
     public long myGroupId() {
         return groupId;
     }
+
     private int curIndex = 0;
     private boolean isInit = false;
 
@@ -109,8 +110,8 @@ public final class Group {
         return status.isHandler;
     }
 
-    public void reset(){
-        for(int i = 0;i<users.size();i++){
+    public void reset() {
+        for (int i = 0; i < users.size(); i++) {
             userStatusMap.get(users.get(i)).isHandler = false;
         }
     }
@@ -129,16 +130,45 @@ public final class Group {
     }
 
     public Issue nextIssue() {
-        if(issues.isEmpty())
+        if (issues.isEmpty())
             return null;
         reset();
         return issues.poll();
     }
 
-    public void newIssue(Issue issue) {
-        issues.add(issue);
+
+    /**
+     * 故障过滤
+     *
+     * @param issue
+     */
+    private boolean filter(Issue issue) {
+        int index = issues.indexOf(issue); //队列中不包含同类型的消息则返回-1；
+        if (index == -1) {
+            return true;
+        }
+        Issue thisIssue = issues.get(index);
+        thisIssue.countAdd();
+        thisIssue.updatePCInfo(issue);
+        return false;
     }
 
+    /**
+     * 产生的故障先经过过滤，过滤方法返回true说明，当前队列不含同类型的故障消息
+     *
+     * @param issue
+     */
+    public void newIssue(Issue issue) {
+        if (filter(issue)) {
+            issues.add(issue);
+        }
+    }
+
+    /**
+     * 客户端收到故障消息后，自动发送回执消息
+     *
+     * @param fromUser
+     */
     public void clientRespond(UserInfo fromUser) {
         MyMessage m = new MyMessage();
         m.code = Config.CODE_CLIENT_RESPOND;

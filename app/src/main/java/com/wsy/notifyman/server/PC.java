@@ -9,7 +9,9 @@ import org.greenrobot.eventbus.EventBus;
  * describe ：
  */
 
-public final class PC {
+public class PC {
+
+
 
     private int cpuRate = 0;
     private float memoryCount = 10000;
@@ -20,6 +22,54 @@ public final class PC {
     private float humidity = 0;
     private float netRate = 0;
 
+
+    public PC(PC pc) {
+        this.cpuRate = pc.getCpuRate();
+        this.memoryUse = pc.getMemoryUse();
+        this.storageUse = pc.getStorageUse();
+        this.temperature =pc. getTemperature();
+        this.humidity = pc.getHumidity();
+        this.netRate = pc.getNetRate();
+    }
+
+    public void setCpuRate(int cpuRate) {
+        this.cpuRate = cpuRate;
+    }
+
+    public void setMemoryCount(float memoryCount) {
+        this.memoryCount = memoryCount;
+    }
+
+    public void setMemoryUse(float memoryUse) {
+        this.memoryUse = memoryUse;
+    }
+
+    public void setStorageCount(float storageCount) {
+        this.storageCount = storageCount;
+    }
+
+    public void setStorageUse(float storageUse) {
+        this.storageUse = storageUse;
+    }
+
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setHumidity(float humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setNetRate(float netRate) {
+        this.netRate = netRate;
+    }
+
+    public static void setPc(PC pc) {
+        PC.pc = pc;
+    }
+
+    public PC() {
+    }
 
     public int getCpuRate() {
         return cpuRate;
@@ -83,7 +133,7 @@ public final class PC {
             return true;
         if (humidity >= 80)
             return true;
-        if(netRate >= 80)
+        if (netRate >= 80)
             return true;
         return false;
     }
@@ -131,4 +181,14 @@ public final class PC {
                 ", netRate=" + netRate +
                 '}';
     }
+
+    public PC newPc() {
+        try {
+            return (PC) this.clone();
+        } catch (CloneNotSupportedException e) {
+            return this;
+        }
+    }
+
+
 }
