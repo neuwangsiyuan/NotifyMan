@@ -14,9 +14,6 @@ import com.wsy.notifyman.server.adapter.IssuesAdapter;
 import dong.lan.base.ui.BaseFragment;
 
 /**
- * Created by 梁桂栋 on 2017/5/13.
- * Email: 760625325@qq.com
- * Github: github.com/donlan
  */
 
 public class IssuesFragment extends BaseFragment {

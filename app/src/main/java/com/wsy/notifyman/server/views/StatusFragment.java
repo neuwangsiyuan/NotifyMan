@@ -18,13 +18,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import dong.lan.base.ui.BaseFragment;
 
 /**
- * Created by 梁桂栋 on 2017/5/13.
- * Email: 760625325@qq.com
- * Github: github.com/donlan
  */
 
 public class StatusFragment extends BaseFragment {
 
+    //创建碎片显示
     public static StatusFragment newInstance(String tittle) {
         StatusFragment fragment = new StatusFragment();
         Bundle bundle = new Bundle();

@@ -213,6 +213,7 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

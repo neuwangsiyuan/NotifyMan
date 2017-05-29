@@ -44,6 +44,7 @@ public class ApplyCenterActivity extends BaseActivity implements ApplyAdapter.Ap
         init();
     }
 
+
     private void init() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Apply> applies = realm.where(Apply.class).findAllSortedAsync("applyTime", Sort.DESCENDING);

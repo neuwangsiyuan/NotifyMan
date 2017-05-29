@@ -112,6 +112,7 @@ public class HomeActivity extends BaseActivity {
         });
 
         groupId = SPHelper.get().getLong("groupId");
+        // TODO: 2017/5/23 groupID
         if (groupId == 0) {
             serverNameInput.setVisibility(View.VISIBLE);
             bindServerReason.setVisibility(View.VISIBLE);
@@ -145,7 +146,7 @@ public class HomeActivity extends BaseActivity {
 
     private boolean isConv = false;
 
-    //服务器逻辑开始
+    //客户端逻辑开始
     private void running() {
         JMessageClient.getGroupIDList(new GetGroupIDListCallback() {
             @Override
@@ -157,6 +158,7 @@ public class HomeActivity extends BaseActivity {
                     JMessageClient.enterGroupConversation(groupId);
                     isConv = true;
                     toast("与服务器连接成功");
+                    // TODO: 2017/5/23 tabs[0]).start(null)含义
                     ((BaseFragment)tabs[0]).start(null);
                 }
             }
